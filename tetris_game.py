@@ -1,6 +1,6 @@
 import pygame
 import random
-from tetris_blocks import Block
+from tetris_blocks import Block, shapes, shape_colors
 
 #Shapes
 shapes = [
@@ -42,6 +42,7 @@ class Tetris:
     def __init__(self, height, width):
         self.height = height
         self.width = width
+        self.field = []
         for i in range(height):
             new_line = []
             for j in range(width):
@@ -84,12 +85,14 @@ class Tetris:
         self.score += lines ** 2
 
     def draw_next_block(self,screen):
-    
+        if self.upcoming_block is None:
+            return
         font = pygame.font.SysFont("Calibri", 30)
         label = font.render("Next Shape", 1, (128,128,128))
-
+        
         sx = top_left_x + game_width + 50
         sy = top_left_y+ game_width/2 - 100
+        screen.blit(label, (sx, sy - 40))
         format = self.upcoming_block.image()
         for i in range(4):
             for j in range(4):
@@ -118,7 +121,7 @@ class Tetris:
                 if i * 4 + j in self.current_block.image():
                     self.field[i + self.current_block.y][j + self.current_block.x] = self.current_block.color
         self.break_lines() 
-        self.block=self.upcoming_block
+        self.current_block=self.upcoming_block
         self.next_block() 
         if self.intersects(): 
             self.state = "gameover"
@@ -196,9 +199,9 @@ def startGame():
                 for j in range(4):
                     p = i * 4 + j
                     if p in game.current_block.image():
-                        pygame.draw.rect(screen, shape_colors[game.block.color],
+                        pygame.draw.rect(screen, shape_colors[game.current_block.color],
                                          [game.x + game.zoom * (j + game.current_block.x) + 1,
-                                          game.y + game.zoom * (i + game.cuurent_block.y) + 1,
+                                          game.y + game.zoom * (i + game.current_block.y) + 1,
                                           game.zoom - 2, game.zoom - 2])    
         
         #Showing the score
