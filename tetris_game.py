@@ -14,3 +14,12 @@ shapes = [
 #Colors of the pieces
 shape_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
 
+#variables of the game
+width = 700
+height = 600
+game_width = 100  
+game_height = 400  
+block_size = 20
+ 
+top_left_x = (width - game_width) // 2
+top_left_y = height - game_height - 50
