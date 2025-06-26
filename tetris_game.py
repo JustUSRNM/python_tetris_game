@@ -105,7 +105,7 @@ class Tetris:
         self.freeze()                
     
     #Moves the block down by a unit
-    def moveDown(self):
+    def move_down(self):
         self.current_block.y += 1
         if self.intersects():
             self.current_block.y -= 1
@@ -124,7 +124,7 @@ class Tetris:
             self.state = "gameover"
     
     #Lets the pieces move horizontaly
-    def moveHoriz(self, dx):
+    def move_horizontal(self, dx):
         old_x = self.current_block.x
         self.current_block.x += dx
         if self.intersects():
@@ -136,3 +136,102 @@ class Tetris:
         self.current_block.rotate()
         if self.intersects():
             self.current_block.rotation = old_rotation
+
+pygame.font.init()
+
+def startGame():
+    done = False
+    clock = pygame.time.Clock()
+    fps = 25
+    game = Tetris(20, 10)
+    counter = 0
+
+    pressing_down = False
+    
+    while not done:
+        #Create a new block if there is no moving block
+        if game.current_block is None:
+            game.new_block()
+        if game.upcoming_block is None:
+            game.next_block()
+        counter += 1 #Keeping track if the time 
+        if counter > 100000:
+            counter = 0
+        
+        #Moving the block continuously with time or when down key is pressed
+        if counter % (fps // game.level // 2) == 0 or pressing_down:
+            if game.state == "start":
+                game.move_down()
+        
+        #Controls
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    game.rotate()
+                if event.key == pygame.K_DOWN:
+                    game.move_down()
+                if event.key == pygame.K_LEFT:
+                    game.move_horizontal(-1)
+                if event.key == pygame.K_RIGHT:
+                    game.move_horizontal(1)
+                if event.key == pygame.K_SPACE:
+                    game.move_bottom()
+                if event.key == pygame.K_ESCAPE:
+                    game.__init__(20, 10)
+    
+        screen.fill('#FFFFFF')
+
+    #Refreing the game board
+        for i in range(game.height):
+            for j in range(game.width):
+                pygame.draw.rect(screen, '#B2BEB5', [game.x + game.zoom * j, game.y + game.zoom * i, game.zoom, game.zoom], 1)
+                if game.field[i][j] > 0:
+                    pygame.draw.rect(screen, shape_colors[game.field[i][j]],
+                                     [game.x + game.zoom * j + 1, game.y + game.zoom * i + 1, game.zoom - 2, game.zoom - 1])
+                    
+        if game.current_block is not None:
+            for i in range(4):
+                for j in range(4):
+                    p = i * 4 + j
+                    if p in game.current_block.image():
+                        pygame.draw.rect(screen, shape_colors[game.block.color],
+                                         [game.x + game.zoom * (j + game.current_block.x) + 1,
+                                          game.y + game.zoom * (i + game.cuurent_block.y) + 1,
+                                          game.zoom - 2, game.zoom - 2])    
+        
+        #Showing the score
+        font = pygame.font.SysFont('Calibri', 40, True, False)
+        font_1 = pygame.font.SysFont('Calibri', 25, True, False)
+        text = font.render("Score: " + str(game.score), True, '#000000')
+        text_game_over = font.render("Game Over", True, '#000000')
+        text_game_over1 = font.render("Press ESC", True, '#000000')       
+
+        #Ending the game if state is gameover
+        screen.blit(text, [300, 0])
+        if game.state == "gameover":
+            screen.blit(text_game_over, [300, 200])
+            screen.blit(text_game_over1, [300, 265])
+       
+        game.draw_next_block(screen)
+
+        pygame.display.flip()
+        clock.tick(fps)     
+
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Tetris by DataFlair")
+run = True
+while run:
+    screen.fill((16, 57, 34 ))
+    font = pygame.font.SysFont("Calibri", 70, bold=True)
+    label = font.render("Press any key to begin!", True, '#FFFFFF')
+
+    screen.blit(label, (10, 300 ))
+    pygame.display.update()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.KEYDOWN:
+            startGame()
+pygame.quit()
