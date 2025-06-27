@@ -1,4 +1,5 @@
 from settings import *
+from tetris import Tetris
 import sys
 
 
