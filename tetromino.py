@@ -2,13 +2,14 @@ from settings import *
 from blocks import Block
 import random
 
-class Tetrimino:
-    def __init__(self, tetris):
+class Tetromino:
+    def __init__(self, tetris, current = True):
         self.tetris = tetris
         self.shape = random.choice(list(tetrominoes.keys()))
         self.image = random.choice(tetris.app.images)
         self.blocks = [Block(self, pos) for pos in tetrominoes[self.shape]]
         self.landing = False
+        self.current = current
 
     def rotate(self):
         pivot_pos = self.blocks[0].pos
