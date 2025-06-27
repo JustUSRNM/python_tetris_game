@@ -9,6 +9,22 @@ class Tetris:
         self.field_array = self.get_field_array()
         self.tetrimino = Tetrimino(self)
 
+    def check_full_lines(self):
+        row = field_h - 1
+        for y in range(field_h - 1, -1, -1):
+            for x in range(field_w):
+                self.field_array[row][x] = self.field_array[y][x]
+                
+                if self.field_array[y][x]:
+                    self.field_array[row][x].pos = vec(x, y)
+
+            if sum(map(bool, self.field_array[y])) < field_w:
+                row -= 1
+            else:
+                for x in range(field_w):
+                    self.field_array[row][x].alive = False
+                    self.field_array[row][x] = 0
+
     def put_tetromino_blocks_in_array(self):
         for block in self.tetrimino.blocks:
             x, y = int(block.pos.x), int(block.pos.y)
@@ -38,6 +54,7 @@ class Tetris:
 
     def update(self):
         if self.app.anim_trigger:
+            self.check_full_lines()
             self.tetrimino.update()
             self.check_tetrimono_landing()
         self.sprite_group.update()
