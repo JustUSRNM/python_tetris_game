@@ -1,7 +1,7 @@
 from settings import *
 from tetris import Tetris
 import sys
-
+import pathlib
 
 class App:
     def __init__(self):
@@ -10,7 +10,14 @@ class App:
         self.screen = pg.display.set_mode(field_res)
         self.clock = pg.time.Clock()
         self.set_timer()
+        self.images = self.load_images()
         self.tetris = Tetris(self)
+
+    def load_images(self):
+        files = [item for item in pathlib.Path(sprite_dir_path).rglob('*.png') if item.is_file()]
+        images = [pg.image.load(file).convert_alpha() for file in files]
+        images = [pg.transform.scale(image, (tile_size, tile_size)) for image in images]
+        return images
 
     def set_timer(self):
         self.user_event = pg.USEREVENT + 0
