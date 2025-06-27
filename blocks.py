@@ -16,5 +16,11 @@ class Block (pg.sprite.Sprite):
     def update(self):
         self.set_rect_pos()
 
+    def is_collide(self, pos):
+        x, y = int(pos.x), int(pos.y)
+        if 0 <= x < field_w and y < field_h and (y < 0 or not self.tetromino.tetris.field_array[y][x]):
+            return False
+        return True
+
     
    
