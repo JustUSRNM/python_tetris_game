@@ -7,6 +7,7 @@ field_color = (48, 39, 32)
 bg_color = (24, 89, 117)
 
 sprite_dir_path = 'assets/sprites'
+font_dir_path = 'assets/font/Shooting Star.ttf'
 
 anim_time_interval = 150
 fast_anim_time_interval = 15
