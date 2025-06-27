@@ -10,6 +10,11 @@ class Block (pg.sprite.Sprite):
         self.image.fill('orange')
         self.rect = self.image.get_rect()
         
+    def rotate(self, pivot_pos):
+        translated = self.pos - pivot_pos
+        rotated = translated.rotate(90)
+        return rotated + pivot_pos      
+
     def set_rect_pos(self):
         self.rect.topleft = self.pos * tile_size
 

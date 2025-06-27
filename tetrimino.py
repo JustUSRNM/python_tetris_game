@@ -9,6 +9,14 @@ class Tetrimino:
         self.blocks = [Block(self, pos) for pos in tetrominoes[self.shape]]
         self.landing = False
 
+    def rotate(self):
+        pivot_pos = self.blocks[0].pos
+        new_block_positions = [block.rotate(pivot_pos) for block in self.blocks]
+
+        if not self.is_collide(new_block_positions):
+            for i, block in enumerate(self.blocks):
+                block.pos = new_block_positions[i]
+
     def is_collide(self, block_positions):
         return any(map(Block.is_collide, self.blocks, block_positions))
 
@@ -22,6 +30,6 @@ class Tetrimino:
 
         elif direction == 'down':
             self.landing = True
-            
+
     def update(self):
         self.move(direction='down')   
