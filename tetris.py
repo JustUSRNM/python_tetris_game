@@ -16,7 +16,7 @@ class Tetris:
 
     def update(self):
         self.tetrimino.update()
-        self.sprite_group.update
+        self.sprite_group.update()
 
     def draw(self):
         self.draw_grid()    
