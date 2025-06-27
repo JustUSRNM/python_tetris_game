@@ -17,7 +17,7 @@ class App:
 
     def draw(self):
         self.screen.fill(color=field_color)
-        self.tetris.update()
+        self.tetris.draw()
         pg.display.flip()
 
     def check_events(self):
