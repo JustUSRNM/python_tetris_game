@@ -8,6 +8,14 @@ class Tetris:
         self.sprite_group = pg.sprite.Group()
         self.tetrimino = Tetrimino(self)
 
+    def control(self, pressed_key):
+        if pressed_key == pg.K_LEFT:
+            self.tetrimino.move(direction='left')
+        elif pressed_key == pg.K_RIGHT:
+            self.tetrimino.move(direction='right')
+        elif pressed_key == pg.K_DOWN:
+            self.speed_up = True
+
     def draw_grid(self):
         for x in range(field_w):
             for y in range(field_h):
